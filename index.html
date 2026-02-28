@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Local Shop - Fresh Finds, Best Prices</title>
+  <style>
+    /* Reset & basics */
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f9fafb;
+      color: #333;
+      scroll-behavior: smooth;
+    }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+    button {
+      cursor: pointer;
+      border: none;
+      background: #007bff;
+      color: white;
+      font-weight: 600;
+      border-radius: 6px;
+      padding: 0.5em 1.2em;
+      transition: background-color 0.3s;
+    }
+    button:hover,
+    button:focus {
+      background: #0056b3;
+      outline: none;
+    }
+
+    /* Sticky Navbar */
+    nav {
+      position: sticky;
+      top: 0;
+      background: #fff;
+      box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
+      z-index: 1001;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.8em 1em;
+    }
+    nav .logo {
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: #007bff;
+      user-select: none;
+    }
+    nav .nav-links {
+      display: flex;
+      gap: 1em;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+    nav .nav-links a {
+      color: #007bff;
+    }
+    nav .nav-links a:hover,
+    nav .nav-links a:focus {
+      text-decoration: underline;
+      outline: none;
+    }
+
+    /* Hero Section */
+    header {
+      position: relative;
+      background: url('https://images.unsplash.com/photo-1617191511515-ec3c99f29092?auto=format&fit=crop&w=1470&q=80') no-repeat center center/cover;
+      min-height: 60vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      text-align: center;
+      padding: 2em 1em;
+      box-shadow: inset 0 0 40vh 20vh rgba(0, 0, 0, 0.25);
+    }
+    .hero-heading {
+      font-size: 2.4rem;
+      font-weight: 800;
+      margin: 0;
+      line-height: 1.1;
+      text-shadow: 0 3px 8px rgba(0,0,0,0.6);
+    }
+    .hero-tagline {
+      font-size: 1.2rem;
+      margin: 0.5em 0 1.5em 0;
+      font-weight: 500;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    }
+    #shop-now-btn {
+      font-size: 1.1rem;
+      padding: 0.7em 2em;
+      border-radius: 40px;
+      box-shadow: 0 5px 10px rgb(0 123 255 / 0.5);
+      transition: box-shadow 0.3s;
+    }
+    #shop-now-btn:hover,
+    #shop-now-btn:focus {
+      box-shadow: 0 7px 15px rgb(0 123 255 / 0.8);
+      outline: none;
+    }
+
+    /* Products Section */
+    main {
+      padding: 2em 1em 4em 1em;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    h2.section-title {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 700;
+      color: #007bff;
+      margin-bottom: 1.2em;
+    }
+
+    /* Carousel container */
+    .carousel {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      gap: 1em;
+      padding-bottom: 1em;
+      scrollbar-width: none; /* Firefox */
+    }
+    .carousel::-webkit-scrollbar {
+      display: none; /* Chrome/Safari */
+    }
+
+    .product-card {
+      scroll-snap-align: start;
+      flex: 0 0 75vw;
+      max-width: 280px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      padding: 1em;
+      transition: box-shadow 0.3s;
+    }
+    .product-card:hover,
+    .product-card:focus-within {
+      box-shadow: 0 8px 20px rgba(0,0,0,0.18);
+    }
+    .product-img {
+      width: 100%;
+      height: 180px;
+      object-fit: contain;
+      border-radius: 8px;
+      margin-bottom: 1em;
+      background: #f1f3f5;
+      flex-shrink: 0;
+    }
+    .product-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin: 0 0 0.25em 0;
+      flex-grow: 1;
+    }
+    .product-price {
+      font-weight: 600;
+      font-size: 1rem;
+      color: #555;
+      margin-bottom: 1em;
+    }
+    .add-to-cart-btn {
+      background: #28a745;
+      transition: background-color 0.3s;
+    }
+    .add-to-cart-btn:hover,
+    .add-to-cart-btn:focus {
+      background: #1e7e34;
+      outline: none;
+    }
+
+    /* Floating WhatsApp button bottom-right */
+    #whatsapp-btn {
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      z-index: 1002;
+      background-color: #25d366;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      box-shadow: 0 4px 10px rgb(37 211 102 / 0.4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: background-color 0.3s;
+    }
+    #whatsapp-btn:hover,
+    #whatsapp-btn:focus {
+      background-color: #1ebe57;
+      outline: none;
+    }
+    #whatsapp-btn svg {
+      width: 28px;
+      height: 28px;
+      fill: white;
+    }
+
+    /* Floating Cart Icon (bottom-right, above WhatsApp button) */
+    #cart-btn {
+      position: fixed;
+      bottom: 140px;
+      right: 20px;
+      z-index: 1003;
+      background-color: #007bff;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      box-shadow: 0 4px 10px rgb(0 123 255 / 0.4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    #cart-btn:hover,
+    #cart-btn:focus {
+      background-color: #0056b3;
+      outline: none;
+    }
+    #cart-btn svg {
+      width: 28px;
+      height: 28px;
+      fill: white;
+    }
+    #cart-count {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: #dc3545;
+      font-size: 0.75rem;
+      color: white;
+      font-weight: 700;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* Cart Drawer - slides from right */
+    #cart-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 320px;
+      max-width: 90vw;
+      height: 100vh;
+      background: white;
+      box-shadow: -4px 0 15px rgba(0,0,0,0.2);
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      z-index: 1100;
+      display: flex;
+      flex-direction: column;
+      padding: 1em;
+    }
+    #cart-drawer.open {
+      transform: translateX(0);
+    }
+    #cart-drawer header {
+      font-weight: 700;
+      font-size: 1.3rem;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 0.7em;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    #cart-drawer header button.close-cart {
+      background: none;
+      color: #333;
+      font-size: 1.6rem;
+      font-weight: 700;
+      line-height: 1;
+      cursor: pointer;
+      border: none;
+      padding: 0 0.2em 0 0;
+      user-select: none;
+    }
+    #cart-items {
+      flex-grow: 1;
+      overflow-y: auto;
+      margin-top: 1em;
+      margin-bottom: 1em;
+    }
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.5em 0;
+      border-bottom: 1px solid #eee;
+    }
+    .cart-item-name {
+      flex-grow: 1;
+      font-weight: 600;
+      font-size: 1rem;
+      user-select: none;
+    }
+    .cart-item-qty {
+      margin: 0 0.5em;
+      min-width: 30px;
+      text-align: center;
+      font-weight: 500;
+    }
+    .cart-item-controls button {
+      background: none;
+      border: none;
+      color: #007bff;
+      font-weight: 700;
+      font-size: 1.2rem;
+      user-select: none;
+      padding: 0 0.2em;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+    .cart-item-controls button:hover,
+    .cart-item-controls button:focus {
+      color: #0056b3;
+      outline: none;
+    }
+    #cart-total {
+      font-weight: 700;
+      font-size: 1.2rem;
+      text-align: right;
+      margin: 1em 0 0.7em 0;
+      user-select: none;
+    }
+
+    /* Order form styling */
+    #order-form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8em;
+    }
+    #order-form label {
+      font-weight: 600;
+      font-size: 0.85rem;
+      user-select: none;
+    }
+    #order-form input,
+    #order-form textarea {
+      padding: 0.5em;
+      border: 1.5px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-family: inherit;
+      resize: vertical;
+      transition: border-color 0.3s;
+    }
+    #order-form input:focus,
+    #order-form textarea:focus {
+      border-color: #007bff;
+      outline: none;
+    }
+    #send-order-btn {
+      margin-top: 0.5em;
+      background: #007bff;
+      font-weight: 700;
+      padding: 0.7em;
+      border-radius: 8px;
+      box-shadow: 0 5px 12px rgb(0 123 255 / 0.4);
+      transition: background-color 0.3s, box-shadow 0.3s;
+    }
+    #send-order-btn:hover,
+    #send-order-btn:focus {
+      background: #0056b3;
+      box-shadow: 0 7px 17px rgb(0 86 179 / 0.6);
+      outline: none;
+    }
+    #form-status {
+      margin-top: 0.5em;
+      font-size: 0.9rem;
+      min-height: 1.3em;
+      user-select: none;
+    }
+
+    /* Responsive and enhancement */
+    @media (min-width: 600px) {
+      .product-card {
+        flex: 0 0 250px;
+      }
+      header {
+        min-height: 70vh;
+      }
+      .hero-heading {
+        font-size: 3rem;
+      }
+      .hero-tagline {
+        font-size: 1.5rem;
+      }
+    }
+    @media (min-width: 900px) {
+      nav .nav-links {
+        display: none; /* no additional nav for now */
+      }
+      .carousel {
+        gap: 1.5em;
+      }
+      .product-card {
+        flex: 0 0 220px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Sticky Navbar -->
+  <nav role="navigation" aria-label="Primary">
+    <div class="logo" tabindex="0">The Local Shop</div>
+    <div class="nav-links">
+      <a href="#hero">Home</a>
+      <a href="#products">Products</a>
+      <a href="#cart-drawer" id="nav-cart-link">Cart</a>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header id="hero" role="banner">
+    <h1 class="hero-heading" tabindex="0">Welcome to The Local Shop</h1>
+    <p class="hero-tagline" tabindex="0">Fresh Finds, Best Prices</p>
+    <button id="shop-now-btn" aria-label="Shop Now, scroll to products">Shop Now</button>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <section id="products" aria-label="Product Carousel">
+      <h2 class="section-title" tabindex="0">Our Products</h2>
+      <div class="carousel" role="list" aria-live="polite" aria-label="Product carousel">
+        <!-- Product cards will be inserted here by JS -->
+      </div>
+    </section>
+  </main>
+
+  <!-- Floating WhatsApp Button -->
+  <a id="whatsapp-btn" href="#"
+    role="button"
+    aria-label="Contact us on WhatsApp"
+    target="_blank" rel="noopener" tabindex="0">
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M20.5 3.5A10.5 10.5 0 0 0 3.5 20.5c.54 0 1.08-.05 1.6-.15l-1.72 4.02 4.14-1.66A10.5 10.5 0 1 0 20.5 3.5Zm-1.15 14.66c-.27.76-1.06 1.46-1.84 1.56-.55.08-1.02.12-3.25-.9-2.41-1.15-4-3.74-4.14-3.91-.14-.17-1.12-1.4-1.12-2.67 0-1.27.67-1.85.91-2.1.23-.24.5-.3.75-.3.26 0 .53 0 .76.01.25.02.58-.11.91.68.33.8 1.13 2.78 1.22 2.98.09.21.14.48.03.75-.11.26-.17.43-.34.66-.17.23-.36.53-.51.72-.17.2-.35.43-.05.84.3.41 1.33 2.19 2.85 3.09 2.01 1.19 2.87 1.03 3.39.96.52-.06 1.73-.71 1.97-1.4.25-.7.25-1.29.17-1.41Z"/>
+    </svg>
+  </a>
+
+  <!-- Floating Cart Button -->
+  <button id="cart-btn" aria-label="Open shopping cart" aria-haspopup="dialog" aria-expanded="false" tabindex="0">
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <path d="M7 18a2 2 0 1 1 -4 0 2 2 0 0 1 4 0zm13-13h-14.27a.75.75 0 0 0 -.67.46l-3.7 8.3a.75.75 0 0 0 .2.85c.13.11.3.16.47.16h1.8a2 2 0 1 0 3.14-2H15.5a.75.75 0 0 0 .7-.47L19 7.5a.75.75 0 0 0 -.5-1.3zm-1 11a2 2 0 1 1 4 0 2 2 0 0 1 -4 0z"/>
+    </svg>
+    <div id="cart-count" aria-live="polite">0</div>
+  </button>
+
+  <!-- Cart Drawer -->
+  <aside id="cart-drawer" role="dialog" aria-modal="true" aria-labelledby="cart-title" tabindex="-1">
+    <header>
+      <div id="cart-title">Your Cart</div>
+      <button class="close-cart" aria-label="Close cart">×</button>
+    </header>
+    <section id="cart-items" aria-live="polite" aria-relevant="additions removals"></section>
+    <div id="cart-total" aria-live="polite" aria-atomic="true">Total: ₹0</div>
+    <form id="order-form" aria-label="Order form">
+      <label for="customer-name">Customer Name<span aria-hidden="true">*</span>:</label>
+      <input type="text" id="customer-name" name="customerName" required autocomplete="name" />
+      <label for="customer-phone">Phone Number<span aria-hidden="true">*</span>:</label>
+      <input type="tel" id="customer-phone" name="customerPhone" required placeholder="+91xxxxxxxxxx" autocomplete="tel" pattern="[+0-9\s\-]+" />
+      <label for="customer-message">Optional Message:</label>
+      <textarea id="customer-message" name="customerMessage" rows="3" placeholder="Any special instructions..."></textarea>
+      <button type="submit" id="send-order-btn">Send Order</button>
+      <div id="form-status" role="status" aria-live="polite"></div>
+    </form>
+  </aside>
+
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <script>
+    /* ========== Shop Data ========== */
+    const PHONE_NUMBER = "[Insert Phone Number]"; // Replace with actual WhatsApp number, e.g. 919999999999
+    const WHATSAPP_LINK = "https://wa.me/" + PHONE_NUMBER.replace(/\D/g, '');
+    const OWNER_EMAIL = "thelocalshop@gmail.com";
+
+    // Products Data (6 cards, repeat 2x each)
+    const products = [
+      {
+        id: 1,
+        name: "Dot & Key Face Wash",
+        price: 299,
+        img: "https://i.ibb.co/gMvL1tFh/dot-and-key-facewash.jpg"
+      },
+      {
+        id: 2,
+        name: "Book – Learn & Grow",
+        price: 199,
+        img: "https://i.ibb.co/LhQnR2H0/book.jpg"
+      },
+      {
+        id: 3,
+        name: "Smart Watch",
+        price: 1499,
+        img: "https://i.ibb.co/5g5FyhnT/smartwatch.jpg"
+      }
+    ];
+    // Repeat these two times to get at least 6 cards.
+    const doubledProducts = [...products, ...products.map(p => ({...p, id: p.id + 3}))];
+
+    /* ========== Helper Functions ========== */
+    function formatPrice(num) {
+      return `₹${num.toLocaleString('en-IN')}`;
+    }
+
+    /* ========== Elements ========== */
+    const carouselEl = document.querySelector('.carousel');
+    const shopNowBtn = document.getElementById('shop-now-btn');
+    const whatsappBtn = document.getElementById('whatsapp-btn
